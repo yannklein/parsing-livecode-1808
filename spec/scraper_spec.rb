@@ -1,8 +1,8 @@
 require_relative "../scraper.rb"
 
-imdb_url = "https://www.imdb.com/chart/top"
+the_dark_knight_url = "https://www.imdb.com/title/tt0468569/"
 
-# data for #fetch_movies_url:
+# data for #get_top_5_movie_urls:
 # [
 #   "https://www.imdb.com/title/tt0111161/",
 #   "https://www.imdb.com/title/tt0068646/",
@@ -11,45 +11,35 @@ imdb_url = "https://www.imdb.com/chart/top"
 #   "https://www.imdb.com/title/tt0050083/"
 # ]
 
-describe "#fetch_movie_urls" do
-  it "return an array of 5 movies" do
-    expected = [
-      "https://www.imdb.com/title/tt0111161/",
-      "https://www.imdb.com/title/tt0068646/",
-      "https://www.imdb.com/title/tt0468569/",
-      "https://www.imdb.com/title/tt0071562/",
-      "https://www.imdb.com/title/tt0050083/"
-    ]
-    actual = fetch_movie_urls(imdb_url)
-    expect(actual).to eq(expected)
-  end
-end
-
 # data for #scrape_movie:
-#
-# link to scrape: "https://www.imdb.com/title/tt0468569/"
-#
 # {
-#   cast: [ "Christian Bale", "Heath Ledger", "Aaron Eckhart" ],
+#   cast: ["Christian Bale", "Heath Ledger", "Aaron Eckhart"],
 #   director: "Christopher Nolan",
-#   storyline: "When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham. The Dark Knight must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+#   storyline: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
 #   title: "The Dark Knight",
 #   year: 2008
 # }
-describe "#scrape_movie" do
-  it "return a hash with the right movie info" do
-    expected = {
-      cast: [ "Christian Bale", "Heath Ledger", "Aaron Eckhart" ],
-      director: "Christopher Nolan",
-      storyline: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-      title: "The Dark Knight",
-      year: 2008
-    }
-    actual = scrape_movie("https://www.imdb.com/title/tt0468569/")
+
+describe "#get_top_5_movie_urls" do 
+  it "returns an array of 5 movie URLs" do
+    expected = ["https://www.imdb.com/title/tt0111161/", "https://www.imdb.com/title/tt0068646/", "https://www.imdb.com/title/tt0468569/", "https://www.imdb.com/title/tt0071562/", "https://www.imdb.com/title/tt0050083/", "https://www.imdb.com/title/tt0108052/"]
+    actual = get_top_5_movie_urls
+    # puts expected == actual
     expect(actual).to eq(expected)
   end
 end
 
-
-movie_url = "https://www.imdb.com/title/tt0468569/"
-
+describe "#scrape_movie" do
+  it "returns a hashwhich contains all the info for a movie" do 
+    expected = {
+      cast: ["Christian Bale", "Heath Ledger", "Aaron Eckhart"],
+      director: "Christopher Nolan",
+      storyline: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+      title: "The Dark Knight",
+      year: 2008,
+      rating: "9.0/10"
+    }
+    actual = scrape_movie(the_dark_knight_url)
+    expect(actual).to eq(expected)
+  end
+end

@@ -1,24 +1,27 @@
 require_relative 'scraper'
+require 'yaml'
 
 # Challenge breakdown
 
-# 1. get url from website
-url = "https://www.imdb.com/chart/top"
-# 2. scrape the link of the first 5 movies (use inspector to figure out what we want)
-# 3. store 5 links into array
-#  => fetch_movie_urls
-links = fetch_movie_urls(url)
-# 4. iterate over the links array, for each link
-movies = []
-
-links.each do |link|
-  # 5. scrape the info from each movie => hash
-  #  => scrape_movie
-  movie = scrape_movie(link)
-  movies << movie
+# 1. require open-uri, nokogiri ✅
+# 2.0 define method:  `get_top_5_movie_urls` returning an array of URL (String)
+  # 2. get TOP 250 url and store in variable
+  # 3. make a HTTP request using open-uri (= get raw html file)
+  # 4. parse the raw_html with Nokogiri
+  # 5. search for the 5 first movie URLs
+top_five_url = get_top_5_movie_urls
+# 6. iterate over the movie URLs, for each movie URL
+# 8. store all hashes in an array
+movies_info = top_five_url.map do |movie_url|
+  # 7.0 define method: `scrape_movie(movie_url)` returning a hash
+    # 7. make a HTTP request using open-uri (= get raw html file)
+    # 8. parse the raw_html with Nokogiri
+    # 9. search for all the movie infos (in a hash)
+  scrape_movie(movie_url)
 end
-# 6. dump an array of hashes the info into a yaml file
-movies_serialized = movies.to_yaml
-File.open("movies.yml", "wb") do |file|
-  File.write(movies_serialized)
+
+# 9. store the data in a YAML file
+yaml_movies = YAML.dump(movies_info)
+File.open('movies.yaml', 'wb') do |file|
+  file.write(yaml_movies)
 end
